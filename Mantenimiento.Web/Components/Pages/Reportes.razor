@@ -1,0 +1,521 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+@page "/reportes"
+@rendermode InteractiveServer
+
+@using System.Text.Json
+
+@inject IHttpClientFactory HttpClientFactory
+
+<PageTitle>Reportes | Mantenimiento</PageTitle>
+
+<div class="container-fluid py-3">
+
+    <!-- ENCABEZADO -->
+    <div class="d-flex justify-content-between
+        align-items-center flex-wrap gap-3 mb-4">
+
+        <div>
+            <h2 class="fw-semibold mb-1">
+                Reportes de mantenimiento
+            </h2>
+
+            <p class="text-muted mb-0">
+                Consulta del historial de equipos y reparaciones
+            </p>
+        </div>
+
+        <button type="button"
+                class="btn btn-outline-secondary"
+                disabled="@cargando"
+                @onclick="CargarReporteAsync">
+
+            <i class="bi bi-arrow-clockwise me-2"></i>
+            Actualizar
+        </button>
+
+    </div>
+
+    <!-- TABLA DE REPORTES -->
+    <div class="card border">
+
+        <div class="card-header bg-white py-3">
+
+            <h5 class="fw-semibold mb-0">
+                <i class="bi bi-table me-2"></i>
+                Historial de mantenimiento
+            </h5>
+
+        </div>
+
+        <div class="card-body p-4">
+
+            <!-- ESTADO DE CARGA -->
+            @if (cargando)
+            {
+                <div class="text-center py-5">
+
+                    <div class="spinner-border text-secondary"
+                         role="status">
+                    </div>
+
+                    <p class="text-muted mt-3 mb-0">
+                        Consultando reportes...
+                    </p>
+
+                </div>
+            }
+            else if (!string.IsNullOrWhiteSpace(error))
+            {
+                <div class="alert alert-danger mb-0"
+                     role="alert">
+
+                    <i class="bi bi-exclamation-circle me-2"></i>
+                    @error
+
+                </div>
+            }
+            else if (filas.Count == 0)
+            {
+                <div class="text-center py-5">
+
+                    <i class="bi bi-inbox fs-2 text-secondary"></i>
+
+                    <p class="text-muted mt-3">
+                        No hay registros disponibles.
+                    </p>
+
+                </div>
+            }
+            else
+            {
+                <!-- HERRAMIENTAS -->
+                <div class="row align-items-center g-3 mb-3">
+
+                    <div class="col-12 col-md-6">
+
+                        <div class="input-group">
+
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-search"></i>
+                            </span>
+
+                            <input type="search"
+                                   class="form-control"
+                                   placeholder="Buscar en el reporte..."
+                                   aria-label="Buscar registros"
+                                   @bind="busqueda"
+                                   @bind:event="oninput" />
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-12 col-md-6 text-md-end">
+
+                        <span class="text-muted small">
+                            @FilasFiltradas.Count registros encontrados
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <!-- TABLA -->
+                <div class="table-responsive">
+
+                    <table class="table table-hover
+                        table-sm align-middle">
+
+                        <thead class="table-light">
+
+                            <tr>
+                                @foreach (var columna in columnas)
+                                {
+                                    <th scope="col"
+                                        class="py-3 px-3 text-nowrap">
+
+                                        @TituloColumna(columna)
+
+                                    </th>
+                                }
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var fila in FilasPagina)
+                            {
+                                <tr>
+
+                                    @foreach (var columna in columnas)
+                                    {
+                                        <td class="py-3 px-3">
+
+                                            @if (columna.Equals(
+                                                "estado",
+                                                StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                <span class="fw-medium">
+                                                    @ObtenerValor(fila, columna)
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                @ObtenerValor(fila, columna)
+                                            }
+
+                                        </td>
+                                    }
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                @if (FilasFiltradas.Count == 0)
+                {
+                    <p class="text-muted text-center py-3">
+                        No se encontraron coincidencias.
+                    </p>
+                }
+
+                <!-- PAGINACIÓN -->
+                <div class="d-flex justify-content-between
+                    align-items-center flex-wrap gap-2 mt-3">
+
+                    <span class="text-muted small">
+                        Mostrando @FilasPagina.Count
+                        de @FilasFiltradas.Count registros
+                    </span>
+
+                    <div class="d-flex align-items-center gap-2">
+
+                        <button type="button"
+                                class="btn btn-outline-secondary btn-sm"
+                                disabled="@(PaginaEfectiva <= 1)"
+                                @onclick="PaginaAnterior">
+
+                            <i class="bi bi-chevron-left"></i>
+                            Anterior
+
+                        </button>
+
+                        <span class="small text-muted">
+                            Página @PaginaEfectiva de @TotalPaginas
+                        </span>
+
+                        <button type="button"
+                                class="btn btn-outline-secondary btn-sm"
+                                disabled="@(PaginaEfectiva >= TotalPaginas)"
+                                @onclick="PaginaSiguiente">
+
+                            Siguiente
+                            <i class="bi bi-chevron-right"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+@code {
+
+    // ==========================================
+    // 1. DATOS DEL REPORTE
+    // ==========================================
+
+    private List<Dictionary<string, string>> filas = new();
+
+    private List<string> columnas = new();
+
+    private bool cargando;
+
+    private string? error;
+
+    private string busqueda = string.Empty;
+
+    private int paginaActual = 1;
+
+    private const int TamanoPagina = 10;
+
+    // ==========================================
+    // 2. CARGAR AL ABRIR LA PÁGINA
+    // ==========================================
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarReporteAsync();
+    }
+
+    // ==========================================
+    // 3. CONSULTAR API Y WF06
+    // ==========================================
+
+    private async Task CargarReporteAsync()
+    {
+        if (cargando)
+            return;
+
+        cargando = true;
+        error = null;
+
+        try
+        {
+            var cliente = HttpClientFactory.CreateClient(
+                "MantenimientoApi"
+            );
+
+            using var respuesta = await cliente.GetAsync(
+                "api/reportes/mantenimientos"
+            );
+
+            if (!respuesta.IsSuccessStatusCode)
+            {
+                error =
+                    $"No se pudo consultar el reporte. HTTP {(int)respuesta.StatusCode}.";
+
+                return;
+            }
+
+            var contenido = await respuesta.Content
+                .ReadAsStringAsync();
+
+            using var documento = JsonDocument.Parse(contenido);
+
+            var raiz = documento.RootElement;
+
+            if (raiz.ValueKind == JsonValueKind.Object &&
+                raiz.TryGetProperty("ok", out var ok) &&
+                ok.ValueKind == JsonValueKind.False)
+            {
+                error = "WF06 no pudo generar el reporte.";
+                return;
+            }
+
+            var arreglo = BuscarArreglo(raiz);
+
+            var nuevosRegistros =
+                new List<Dictionary<string, string>>();
+
+            if (arreglo.HasValue)
+            {
+                foreach (var elemento in arreglo.Value.EnumerateArray())
+                {
+                    nuevosRegistros.Add(ConvertirFila(elemento));
+                }
+            }
+            else if (raiz.ValueKind == JsonValueKind.Object)
+            {
+                // Permite mostrar una respuesta con un
+                // solo registro y sin arreglo.
+                var fila = ConvertirFila(raiz);
+
+                fila.Remove("ok");
+                fila.Remove("mensaje");
+                fila.Remove("total");
+
+                if (fila.Count > 0)
+                {
+                    nuevosRegistros.Add(fila);
+                }
+            }
+            else
+            {
+                error = "El reporte tiene un formato no compatible.";
+                return;
+            }
+
+            filas = nuevosRegistros;
+
+            columnas = filas
+                .SelectMany(f => f.Keys)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            paginaActual = 1;
+        }
+        catch (HttpRequestException)
+        {
+            error = "No se pudo establecer comunicación con la API.";
+        }
+        catch (TaskCanceledException)
+        {
+            error = "La consulta superó el tiempo de espera.";
+        }
+        catch (JsonException)
+        {
+            error = "El reporte no contiene un JSON válido.";
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+
+    // ==========================================
+    // 4. ENCONTRAR EL ARREGLO DE REGISTROS
+    // ==========================================
+
+    private static JsonElement? BuscarArreglo(
+        JsonElement elemento,
+        int nivel = 0)
+    {
+        if (nivel > 5)
+            return null;
+
+        if (elemento.ValueKind == JsonValueKind.Array)
+            return elemento;
+
+        if (elemento.ValueKind != JsonValueKind.Object)
+            return null;
+
+        string[] nombres = {
+            "registros",
+            "datos",
+            "data",
+            "reporte",
+            "reportes",
+            "mantenimientos",
+            "resultados",
+            "items"
+        };
+
+        foreach (var nombre in nombres)
+        {
+            if (elemento.TryGetProperty(nombre, out var hijo))
+            {
+                var resultado = BuscarArreglo(hijo, nivel + 1);
+
+                if (resultado.HasValue)
+                    return resultado;
+            }
+        }
+
+        foreach (var propiedad in elemento.EnumerateObject())
+        {
+            var resultado = BuscarArreglo(
+                propiedad.Value,
+                nivel + 1
+            );
+
+            if (resultado.HasValue)
+                return resultado;
+        }
+
+        return null;
+    }
+
+    // ==========================================
+    // 5. CONVERTIR JSON A FILAS
+    // ==========================================
+
+    private static Dictionary<string, string> ConvertirFila(
+        JsonElement elemento)
+    {
+        var fila = new Dictionary<string, string>(
+            StringComparer.OrdinalIgnoreCase
+        );
+
+        if (elemento.ValueKind == JsonValueKind.Object)
+        {
+            foreach (var propiedad in elemento.EnumerateObject())
+            {
+                fila[propiedad.Name] =
+                    FormatearValor(propiedad.Value);
+            }
+        }
+        else
+        {
+            fila["valor"] = FormatearValor(elemento);
+        }
+
+        return fila;
+    }
+
+    private static string FormatearValor(JsonElement valor)
+    {
+        return valor.ValueKind switch
+        {
+            JsonValueKind.String => valor.GetString() ?? "",
+            JsonValueKind.Number => valor.ToString(),
+            JsonValueKind.True => "Sí",
+            JsonValueKind.False => "No",
+            JsonValueKind.Null => "—",
+            JsonValueKind.Undefined => "—",
+            _ => valor.GetRawText()
+        };
+    }
+
+    // ==========================================
+    // 6. TABLA Y BÚSQUEDA
+    // ==========================================
+
+    private static string TituloColumna(string nombre)
+    {
+        return nombre.Replace("_", " ");
+    }
+
+    private static string ObtenerValor(
+        Dictionary<string, string> fila,
+        string columna)
+    {
+        return fila.TryGetValue(columna, out var valor)
+            ? valor
+            : "—";
+    }
+
+    private List<Dictionary<string, string>> FilasFiltradas =>
+        string.IsNullOrWhiteSpace(busqueda)
+            ? filas
+            : filas.Where(f =>
+                f.Values.Any(v =>
+                    v.Contains(
+                        busqueda,
+                        StringComparison.OrdinalIgnoreCase
+                    )
+                )
+              ).ToList();
+
+    // ==========================================
+    // 7. PAGINACIÓN
+    // ==========================================
+
+    private int TotalPaginas =>
+        Math.Max(
+            1,
+            (FilasFiltradas.Count + TamanoPagina - 1)
+            / TamanoPagina
+        );
+
+    private int PaginaEfectiva =>
+        Math.Min(paginaActual, TotalPaginas);
+
+    private List<Dictionary<string, string>> FilasPagina =>
+        FilasFiltradas
+            .Skip((PaginaEfectiva - 1) * TamanoPagina)
+            .Take(TamanoPagina)
+            .ToList();
+
+    private void PaginaAnterior()
+    {
+        paginaActual = Math.Max(1, PaginaEfectiva - 1);
+    }
+
+    private void PaginaSiguiente()
+    {
+        paginaActual = Math.Min(TotalPaginas, PaginaEfectiva + 1);
+    }
+}

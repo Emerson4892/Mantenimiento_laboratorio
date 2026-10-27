@@ -1,0 +1,127 @@
+[
+  {
+    "ContainingType": "Mantenimiento.Api.Controllers.EquiposController",
+    "Method": "RegistrarEquipo",
+    "RelativePath": "api/equipos",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "solicitud",
+        "Type": "Mantenimiento.Application.DTOs.RegistrarEquipoRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Mantenimiento.Api.Controllers.FallasController",
+    "Method": "ReportarFalla",
+    "RelativePath": "api/fallas",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "solicitud",
+        "Type": "Mantenimiento.Application.DTOs.ReportarFallaRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Mantenimiento.Api.Controllers.ConsultasController",
+    "Method": "ObtenerFallasPendientes",
+    "RelativePath": "api/fallas/pendientes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Mantenimiento.Api.Controllers.ConsultasController",
+    "Method": "ObtenerMantenimientosAsignados",
+    "RelativePath": "api/mantenimientos/asignados",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Mantenimiento.Api.Controllers.MantenimientosController",
+    "Method": "Asignar",
+    "RelativePath": "api/mantenimientos/asignar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "solicitud",
+        "Type": "Mantenimiento.Application.DTOs.AsignarMantenimientoRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Mantenimiento.Api.Controllers.MantenimientosController",
+    "Method": "Finalizar",
+    "RelativePath": "api/mantenimientos/finalizar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "solicitud",
+        "Type": "Mantenimiento.Application.DTOs.FinalizarMantenimientoRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Mantenimiento.Api.Controllers.ReportesController",
+    "Method": "ObtenerReporte",
+    "RelativePath": "api/reportes/mantenimientos",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Mantenimiento.Api.Controllers.SistemaController",
+    "Method": "ObtenerEstado",
+    "RelativePath": "api/sistema/estado",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Mantenimiento.Api.Controllers.WeatherForecastController",
+    "Method": "Get",
+    "RelativePath": "WeatherForecast",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[Mantenimiento.Api.WeatherForecast, Mantenimiento.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ],
+    "EndpointName": "GetWeatherForecast"
+  }
+]

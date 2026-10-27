@@ -1,0 +1,15 @@
+C:\Users\tzibc\Desktop\Proyecto\MantenimientoLaboratorio\Mantenimiento.Application\bin\Release\net10.0\Mantenimiento.Application.deps.json
+C:\Users\tzibc\Desktop\Proyecto\MantenimientoLaboratorio\Mantenimiento.Application\bin\Release\net10.0\Mantenimiento.Application.dll
+C:\Users\tzibc\Desktop\Proyecto\MantenimientoLaboratorio\Mantenimiento.Application\bin\Release\net10.0\Mantenimiento.Application.pdb
+C:\Users\tzibc\Desktop\Proyecto\MantenimientoLaboratorio\Mantenimiento.Application\bin\Release\net10.0\Mantenimiento.Domain.dll
+C:\Users\tzibc\Desktop\Proyecto\MantenimientoLaboratorio\Mantenimiento.Application\bin\Release\net10.0\Mantenimiento.Domain.pdb
+C:\Users\tzibc\Desktop\Proyecto\MantenimientoLaboratorio\Mantenimiento.Application\obj\Release\net10.0\Mantenimiento.Application.csproj.AssemblyReference.cache
+C:\Users\tzibc\Desktop\Proyecto\MantenimientoLaboratorio\Mantenimiento.Application\obj\Release\net10.0\Mantenimiento.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\tzibc\Desktop\Proyecto\MantenimientoLaboratorio\Mantenimiento.Application\obj\Release\net10.0\Mantenimiento.Application.AssemblyInfoInputs.cache
+C:\Users\tzibc\Desktop\Proyecto\MantenimientoLaboratorio\Mantenimiento.Application\obj\Release\net10.0\Mantenimiento.Application.AssemblyInfo.cs
+C:\Users\tzibc\Desktop\Proyecto\MantenimientoLaboratorio\Mantenimiento.Application\obj\Release\net10.0\Mantenimiento.Application.csproj.CoreCompileInputs.cache
+C:\Users\tzibc\Desktop\Proyecto\MantenimientoLaboratorio\Mantenimiento.Application\obj\Release\net10.0\Mantenim.4F9471E0.Up2Date
+C:\Users\tzibc\Desktop\Proyecto\MantenimientoLaboratorio\Mantenimiento.Application\obj\Release\net10.0\Mantenimiento.Application.dll
+C:\Users\tzibc\Desktop\Proyecto\MantenimientoLaboratorio\Mantenimiento.Application\obj\Release\net10.0\refint\Mantenimiento.Application.dll
+C:\Users\tzibc\Desktop\Proyecto\MantenimientoLaboratorio\Mantenimiento.Application\obj\Release\net10.0\Mantenimiento.Application.pdb
+C:\Users\tzibc\Desktop\Proyecto\MantenimientoLaboratorio\Mantenimiento.Application\obj\Release\net10.0\ref\Mantenimiento.Application.dll

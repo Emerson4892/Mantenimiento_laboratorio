@@ -1,0 +1,105 @@
+{
+  "name": "WF06 - Reporte de Mantenimiento",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "reporte-mantenimiento",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -576,
+        0
+      ],
+      "id": "cc596921-9f20-47e5-88a8-a952b45b19b5",
+      "name": "Consultar Reporte",
+      "webhookId": "8c1b0115-0a90-4819-aa41-fda20bb242c9",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ymBCA43GimkFMJwX",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT\n    e.id_equipo,\n    e.codigo,\n    e.nombre,\n    e.estado AS estado_equipo,\n\n    COUNT(DISTINCT f.id_falla) AS total_fallas,\n\n    COUNT(DISTINCT f.id_falla)\n        FILTER (WHERE f.estado = 'Pendiente') AS fallas_pendientes,\n\n    COUNT(DISTINCT f.id_falla)\n        FILTER (WHERE f.estado = 'En proceso') AS fallas_en_proceso,\n\n    COUNT(DISTINCT f.id_falla)\n        FILTER (WHERE f.estado = 'Cerrada') AS fallas_cerradas,\n\n    COUNT(DISTINCT m.id_mantenimiento) AS total_mantenimientos,\n\n    COUNT(DISTINCT m.id_mantenimiento)\n        FILTER (WHERE m.estado = 'Finalizado') AS mantenimientos_finalizados,\n\n    (\n        SELECT m2.tecnico\n        FROM mantenimientos m2\n        INNER JOIN fallas f2\n            ON f2.id_falla = m2.id_falla\n        WHERE f2.id_equipo = e.id_equipo\n        ORDER BY m2.fecha_asignacion DESC\n        LIMIT 1\n    ) AS ultimo_tecnico\n\nFROM equipos e\n\nLEFT JOIN fallas f\n    ON f.id_equipo = e.id_equipo\n\nLEFT JOIN mantenimientos m\n    ON m.id_falla = f.id_falla\n\nGROUP BY\n    e.id_equipo,\n    e.codigo,\n    e.nombre,\n    e.estado\n\nORDER BY e.id_equipo;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        -368,
+        0
+      ],
+      "id": "9c8b808e-209b-4f18-ba4a-6e03d183c5f3",
+      "name": "Generar Reporte",
+      "credentials": {
+        "postgres": {
+          "id": "8thV3rNcFPBo7jhw",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{\n{\n  ok: true,\n  mensaje: \"Reporte generado correctamente\",\n  equipos: $input.all().map(item => item.json)\n}\n}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        -160,
+        0
+      ],
+      "id": "b9cceb6e-d93a-4c02-908d-25df7b3c6aa4",
+      "name": "Reporte Generado"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Consultar Reporte": {
+      "main": [
+        [
+          {
+            "node": "Generar Reporte",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generar Reporte": {
+      "main": [
+        [
+          {
+            "node": "Reporte Generado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "37b7612e-c258-4fc6-aec6-7f11caa0aff6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6267a444fdd1936b330464ae15307a1db98604d8e331ca1a0353579eb5448405"
+  },
+  "nodeGroups": [],
+  "id": "ERBb7AOwyPvyoCWj",
+  "tags": []
+}

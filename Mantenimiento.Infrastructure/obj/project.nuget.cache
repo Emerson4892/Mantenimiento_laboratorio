@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "gyINDba25RU=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Infrastructure\\Mantenimiento.Infrastructure.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\tzibc\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\10.0.14\\microsoft.extensions.configuration.abstractions.10.0.14.nupkg.sha512",
+    "C:\\Users\\tzibc\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.0\\microsoft.extensions.dependencyinjection.abstractions.10.0.0.nupkg.sha512",
+    "C:\\Users\\tzibc\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\10.0.0\\microsoft.extensions.logging.abstractions.10.0.0.nupkg.sha512",
+    "C:\\Users\\tzibc\\.nuget\\packages\\microsoft.extensions.primitives\\10.0.14\\microsoft.extensions.primitives.10.0.14.nupkg.sha512",
+    "C:\\Users\\tzibc\\.nuget\\packages\\npgsql\\10.0.3\\npgsql.10.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

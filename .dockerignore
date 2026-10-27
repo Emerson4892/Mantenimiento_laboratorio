@@ -1,0 +1,10 @@
+.git
+.vs
+**/.vs
+**/bin
+**/obj
+.env
+.env.*
+**/.env
+**/secrets/
+**/appsettings.Local.json

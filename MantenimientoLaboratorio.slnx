@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="Mantenimiento.Api/Mantenimiento.Api.csproj" />
+  <Project Path="Mantenimiento.Application/Mantenimiento.Application.csproj" />
+  <Project Path="Mantenimiento.Domain/Mantenimiento.Domain.csproj" />
+  <Project Path="Mantenimiento.Infrastructure/Mantenimiento.Infrastructure.csproj" />
+  <Project Path="Mantenimiento.Web/Mantenimiento.Web.csproj" />
+</Solution>

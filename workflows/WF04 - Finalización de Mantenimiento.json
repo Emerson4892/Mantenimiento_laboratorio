@@ -1,0 +1,483 @@
+{
+  "name": "WF04 - Finalización de Mantenimiento",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "finalizar-mantenimiento",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -704,
+        0
+      ],
+      "id": "7d163461-79c3-48fb-bf27-dbe4058bd390",
+      "name": "Recepción de Finalización",
+      "webhookId": "155df73b-6138-495e-bcef-421a61bf43f3",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ymBCA43GimkFMJwX",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const datos = $json.body ?? $json;\nconst errores = [];\n\nif (!datos.id_mantenimiento) {\n    errores.push(\"Falta el ID del mantenimiento\");\n}\n\nif (!datos.solucion) {\n    errores.push(\"Falta la solución realizada\");\n}\n\nreturn [{\n    json: {\n        ...datos,\n        valido: errores.length === 0,\n        errores\n    }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -544,
+        0
+      ],
+      "id": "e6f4729e-afb4-4c6b-9cc7-62648ce38310",
+      "name": "Validar datos de finalización"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b03671c6-ad82-4f73-afe2-dbeeb59c8c52",
+              "leftValue": "={{ $json.valido }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -384,
+        0
+      ],
+      "id": "6794c350-759f-40c4-a156-888b0cc70d9d",
+      "name": "¿Datos válidos?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{\n{\n  ok: false,\n  mensaje: \"Los datos de finalización no son válidos\",\n  errores: $json.errores\n}\n}}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        -208,
+        96
+      ],
+      "id": "863cd3c2-e249-41ff-a690-8f78a4e55180",
+      "name": "Datos inválidos"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT\n    EXISTS(\n        SELECT 1\n        FROM mantenimientos\n        WHERE id_mantenimiento = $1\n    ) AS existe,\n    (\n        SELECT m.id_mantenimiento\n        FROM mantenimientos m\n        WHERE m.id_mantenimiento = $1\n        LIMIT 1\n    ) AS id_mantenimiento,\n    (\n        SELECT m.id_falla\n        FROM mantenimientos m\n        WHERE m.id_mantenimiento = $1\n        LIMIT 1\n    ) AS id_falla,\n    (\n        SELECT f.id_equipo\n        FROM mantenimientos m\n        JOIN fallas f ON f.id_falla = m.id_falla\n        WHERE m.id_mantenimiento = $1\n        LIMIT 1\n    ) AS id_equipo,\n    (\n        SELECT m.estado\n        FROM mantenimientos m\n        WHERE m.id_mantenimiento = $1\n        LIMIT 1\n    ) AS estado_mantenimiento;",
+        "options": {
+          "queryReplacement": "={{ [$json.id_mantenimiento] }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        -208,
+        -112
+      ],
+      "id": "bbe3bfa7-cd02-4a87-a931-d2b55a712ca2",
+      "name": "Buscar Mantenimiento",
+      "credentials": {
+        "postgres": {
+          "id": "8thV3rNcFPBo7jhw",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "083922d2-7f60-46cd-9877-0a97e1e1d42a",
+              "leftValue": "={{ $json.existe }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -48,
+        -16
+      ],
+      "id": "301425fa-2062-49c4-9c01-980da2d9b37f",
+      "name": "¿Mantenimiento existe?"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE mantenimientos\nSET\n    estado = 'Finalizado',\n    solucion = $2,\n    fecha_finalizacion = CURRENT_TIMESTAMP\nWHERE id_mantenimiento = $1\nRETURNING\n    id_mantenimiento,\n    id_falla,\n    tecnico,\n    estado,\n    solucion,\n    fecha_finalizacion;",
+        "options": {
+          "queryReplacement": "={{ [   $(\"¿Mantenimiento existe?\").item.json.id_mantenimiento,   $(\"¿Datos válidos?\").item.json.solucion ] }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        64,
+        -144
+      ],
+      "id": "e1a3823e-6ea4-49c8-94ba-087904e40f47",
+      "name": "Finalizar Mantenimiento",
+      "credentials": {
+        "postgres": {
+          "id": "8thV3rNcFPBo7jhw",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE fallas\nSET estado = 'Cerrada'\nWHERE id_falla = $1\nRETURNING\n    id_falla,\n    id_equipo,\n    descripcion,\n    prioridad,\n    estado;",
+        "options": {
+          "queryReplacement": "={{ [$(\"¿Mantenimiento existe?\").item.json.id_falla] }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        208,
+        -144
+      ],
+      "id": "0ff23cee-7a9b-4dc1-aac4-fa57b90f2513",
+      "name": "Cerrar Falla",
+      "credentials": {
+        "postgres": {
+          "id": "8thV3rNcFPBo7jhw",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE equipos\nSET estado = 'Disponible'\nWHERE id_equipo = $1\nRETURNING\n    id_equipo,\n    codigo,\n    nombre,\n    estado;",
+        "options": {
+          "queryReplacement": "={{ [$(\"¿Mantenimiento existe?\").item.json.id_equipo] }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        368,
+        -144
+      ],
+      "id": "e70ee688-9cf5-47ee-8504-136992406642",
+      "name": "Equipo Disponible",
+      "credentials": {
+        "postgres": {
+          "id": "8thV3rNcFPBo7jhw",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "auditoria",
+          "mode": "list",
+          "cachedResultName": "auditoria"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "accion": "FINALIZACION_MANTENIMIENTO",
+            "entidad": "MANTENIMIENTO",
+            "detalle": "={{\n  \"Mantenimiento \" +\n  $(\"¿Mantenimiento existe?\").item.json.id_mantenimiento +\n  \" finalizado. Falla \" +\n  $(\"¿Mantenimiento existe?\").item.json.id_falla +\n  \" cerrada y equipo \" +\n  $(\"¿Mantenimiento existe?\").item.json.id_equipo +\n  \" disponible\"\n}}",
+            "resultado": "EXITOSO"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "id_auditoria",
+              "displayName": "id_auditoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "accion",
+              "displayName": "accion",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "entidad",
+              "displayName": "entidad",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "detalle",
+              "displayName": "detalle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "resultado",
+              "displayName": "resultado",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fecha",
+              "displayName": "fecha",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        496,
+        -144
+      ],
+      "id": "90cd33f2-1d3f-4a10-ab43-a5f82846f33a",
+      "name": "Registrar Auditoría",
+      "credentials": {
+        "postgres": {
+          "id": "8thV3rNcFPBo7jhw",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{\n{\n  ok: true,\n  mensaje: \"Mantenimiento finalizado correctamente\",\n  id_mantenimiento: $(\"¿Mantenimiento existe?\").item.json.id_mantenimiento,\n  id_falla: $(\"¿Mantenimiento existe?\").item.json.id_falla,\n  id_equipo: $(\"¿Mantenimiento existe?\").item.json.id_equipo,\n  estado_mantenimiento: \"Finalizado\",\n  estado_falla: \"Cerrada\",\n  estado_equipo: \"Disponible\"\n}\n}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        640,
+        -144
+      ],
+      "id": "497536f7-5da1-47de-b208-472a5b28e91c",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{\n{\n  ok: false,\n  mensaje: \"El mantenimiento indicado no existe\",\n  id_mantenimiento: $(\"¿Datos válidos?\").item.json.id_mantenimiento\n}\n}}",
+        "options": {
+          "responseCode": 404
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        160,
+        80
+      ],
+      "id": "2f8d04d9-fc0b-4f54-b969-d1f2349ee2e5",
+      "name": "Mantenimiento no encontrado"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Recepción de Finalización": {
+      "main": [
+        [
+          {
+            "node": "Validar datos de finalización",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar datos de finalización": {
+      "main": [
+        [
+          {
+            "node": "¿Datos válidos?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Datos válidos?": {
+      "main": [
+        [
+          {
+            "node": "Buscar Mantenimiento",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Datos inválidos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Mantenimiento": {
+      "main": [
+        [
+          {
+            "node": "¿Mantenimiento existe?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Mantenimiento existe?": {
+      "main": [
+        [
+          {
+            "node": "Finalizar Mantenimiento",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mantenimiento no encontrado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Finalizar Mantenimiento": {
+      "main": [
+        [
+          {
+            "node": "Cerrar Falla",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cerrar Falla": {
+      "main": [
+        [
+          {
+            "node": "Equipo Disponible",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Equipo Disponible": {
+      "main": [
+        [
+          {
+            "node": "Registrar Auditoría",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registrar Auditoría": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "0de7edc0-d399-4bf3-99e2-964cfabdb830",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6267a444fdd1936b330464ae15307a1db98604d8e331ca1a0353579eb5448405"
+  },
+  "nodeGroups": [],
+  "id": "ZWrlscRf3Zc4pO7n",
+  "tags": []
+}

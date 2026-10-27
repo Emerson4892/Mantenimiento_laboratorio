@@ -1,0 +1,267 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{5FF7C089-5BA2-370F-802B-D740CA93EDC8}|Mantenimiento.Web\\Mantenimiento.Web.csproj|c:\\users\\tzibc\\desktop\\proyecto\\mantenimientolaboratorio\\mantenimiento.web\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5FF7C089-5BA2-370F-802B-D740CA93EDC8}|Mantenimiento.Web\\Mantenimiento.Web.csproj|solutionrelative:mantenimiento.web\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5FF7C089-5BA2-370F-802B-D740CA93EDC8}|Mantenimiento.Web\\Mantenimiento.Web.csproj|c:\\users\\tzibc\\desktop\\proyecto\\mantenimientolaboratorio\\mantenimiento.web\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{5FF7C089-5BA2-370F-802B-D740CA93EDC8}|Mantenimiento.Web\\Mantenimiento.Web.csproj|solutionrelative:mantenimiento.web\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5FF7C089-5BA2-370F-802B-D740CA93EDC8}|Mantenimiento.Web\\Mantenimiento.Web.csproj|c:\\users\\tzibc\\desktop\\proyecto\\mantenimientolaboratorio\\mantenimiento.web\\components\\layout\\navmenu.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5FF7C089-5BA2-370F-802B-D740CA93EDC8}|Mantenimiento.Web\\Mantenimiento.Web.csproj|solutionrelative:mantenimiento.web\\components\\layout\\navmenu.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5FF7C089-5BA2-370F-802B-D740CA93EDC8}|Mantenimiento.Web\\Mantenimiento.Web.csproj|c:\\users\\tzibc\\desktop\\proyecto\\mantenimientolaboratorio\\mantenimiento.web\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5FF7C089-5BA2-370F-802B-D740CA93EDC8}|Mantenimiento.Web\\Mantenimiento.Web.csproj|solutionrelative:mantenimiento.web\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5FF7C089-5BA2-370F-802B-D740CA93EDC8}|Mantenimiento.Web\\Mantenimiento.Web.csproj|c:\\users\\tzibc\\desktop\\proyecto\\mantenimientolaboratorio\\mantenimiento.web\\components\\layout\\mainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5FF7C089-5BA2-370F-802B-D740CA93EDC8}|Mantenimiento.Web\\Mantenimiento.Web.csproj|solutionrelative:mantenimiento.web\\components\\layout\\mainlayout.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5FF7C089-5BA2-370F-802B-D740CA93EDC8}|Mantenimiento.Web\\Mantenimiento.Web.csproj|c:\\users\\tzibc\\desktop\\proyecto\\mantenimientolaboratorio\\mantenimiento.web\\components\\routes.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5FF7C089-5BA2-370F-802B-D740CA93EDC8}|Mantenimiento.Web\\Mantenimiento.Web.csproj|solutionrelative:mantenimiento.web\\components\\routes.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{554FFA75-A044-40D9-B81E-AF8083B6969A}|Mantenimiento.Api\\Mantenimiento.Api.csproj|c:\\users\\tzibc\\desktop\\proyecto\\mantenimientolaboratorio\\mantenimiento.api\\mantenimiento.api.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
+      "RelativeMoniker": "D:0:0:{554FFA75-A044-40D9-B81E-AF8083B6969A}|Mantenimiento.Api\\Mantenimiento.Api.csproj|solutionrelative:mantenimiento.api\\mantenimiento.api.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5FF7C089-5BA2-370F-802B-D740CA93EDC8}|Mantenimiento.Web\\Mantenimiento.Web.csproj|c:\\users\\tzibc\\desktop\\proyecto\\mantenimientolaboratorio\\mantenimiento.web\\components\\pages\\fallas.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5FF7C089-5BA2-370F-802B-D740CA93EDC8}|Mantenimiento.Web\\Mantenimiento.Web.csproj|solutionrelative:mantenimiento.web\\components\\pages\\fallas.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5FF7C089-5BA2-370F-802B-D740CA93EDC8}|Mantenimiento.Web\\Mantenimiento.Web.csproj|c:\\users\\tzibc\\desktop\\proyecto\\mantenimientolaboratorio\\mantenimiento.web\\components\\pages\\mantenimientos.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5FF7C089-5BA2-370F-802B-D740CA93EDC8}|Mantenimiento.Web\\Mantenimiento.Web.csproj|solutionrelative:mantenimiento.web\\components\\pages\\mantenimientos.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5FF7C089-5BA2-370F-802B-D740CA93EDC8}|Mantenimiento.Web\\Mantenimiento.Web.csproj|c:\\users\\tzibc\\desktop\\proyecto\\mantenimientolaboratorio\\mantenimiento.web\\components\\pages\\login.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5FF7C089-5BA2-370F-802B-D740CA93EDC8}|Mantenimiento.Web\\Mantenimiento.Web.csproj|solutionrelative:mantenimiento.web\\components\\pages\\login.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5FF7C089-5BA2-370F-802B-D740CA93EDC8}|Mantenimiento.Web\\Mantenimiento.Web.csproj|c:\\users\\tzibc\\desktop\\proyecto\\mantenimientolaboratorio\\mantenimiento.web\\components\\_imports.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5FF7C089-5BA2-370F-802B-D740CA93EDC8}|Mantenimiento.Web\\Mantenimiento.Web.csproj|solutionrelative:mantenimiento.web\\components\\_imports.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5FF7C089-5BA2-370F-802B-D740CA93EDC8}|Mantenimiento.Web\\Mantenimiento.Web.csproj|c:\\users\\tzibc\\desktop\\proyecto\\mantenimientolaboratorio\\mantenimiento.web\\components\\pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5FF7C089-5BA2-370F-802B-D740CA93EDC8}|Mantenimiento.Web\\Mantenimiento.Web.csproj|solutionrelative:mantenimiento.web\\components\\pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{554FFA75-A044-40D9-B81E-AF8083B6969A}|Mantenimiento.Api\\Mantenimiento.Api.csproj|c:\\users\\tzibc\\desktop\\proyecto\\mantenimientolaboratorio\\mantenimiento.api\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{554FFA75-A044-40D9-B81E-AF8083B6969A}|Mantenimiento.Api\\Mantenimiento.Api.csproj|solutionrelative:mantenimiento.api\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C768DB05-6909-A813-C4E5-8F3A0D09D8D6}|Mantenimiento.Application\\Mantenimiento.Application.csproj|c:\\users\\tzibc\\desktop\\proyecto\\mantenimientolaboratorio\\mantenimiento.application\\dtos\\finalizarmantenimientorequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C768DB05-6909-A813-C4E5-8F3A0D09D8D6}|Mantenimiento.Application\\Mantenimiento.Application.csproj|solutionrelative:mantenimiento.application\\dtos\\finalizarmantenimientorequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C768DB05-6909-A813-C4E5-8F3A0D09D8D6}|Mantenimiento.Application\\Mantenimiento.Application.csproj|c:\\users\\tzibc\\desktop\\proyecto\\mantenimientolaboratorio\\mantenimiento.application\\dtos\\asignarmantenimientorequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C768DB05-6909-A813-C4E5-8F3A0D09D8D6}|Mantenimiento.Application\\Mantenimiento.Application.csproj|solutionrelative:mantenimiento.application\\dtos\\asignarmantenimientorequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "MainLayout.razor",
+              "DocumentMoniker": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Web\\Components\\Layout\\MainLayout.razor",
+              "RelativeDocumentMoniker": "Mantenimiento.Web\\Components\\Layout\\MainLayout.razor",
+              "ToolTip": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Web\\Components\\Layout\\MainLayout.razor",
+              "RelativeToolTip": "Mantenimiento.Web\\Components\\Layout\\MainLayout.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADUAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-26T20:16:47.811Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "NavMenu.razor",
+              "DocumentMoniker": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Web\\Components\\Layout\\NavMenu.razor",
+              "RelativeDocumentMoniker": "Mantenimiento.Web\\Components\\Layout\\NavMenu.razor",
+              "ToolTip": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Web\\Components\\Layout\\NavMenu.razor",
+              "RelativeToolTip": "Mantenimiento.Web\\Components\\Layout\\NavMenu.razor",
+              "ViewState": "AgIAADgAAAAAAAAAAAAswE0AAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-26T20:15:17.346Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "App.razor",
+              "DocumentMoniker": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Web\\Components\\App.razor",
+              "RelativeDocumentMoniker": "Mantenimiento.Web\\Components\\App.razor",
+              "ToolTip": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Web\\Components\\App.razor",
+              "RelativeToolTip": "Mantenimiento.Web\\Components\\App.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-26T20:13:09.813Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Web\\Program.cs",
+              "RelativeDocumentMoniker": "Mantenimiento.Web\\Program.cs",
+              "ToolTip": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Web\\Program.cs",
+              "RelativeToolTip": "Mantenimiento.Web\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-26T17:33:32.315Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Routes.razor",
+              "DocumentMoniker": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Web\\Components\\Routes.razor",
+              "RelativeDocumentMoniker": "Mantenimiento.Web\\Components\\Routes.razor",
+              "ToolTip": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Web\\Components\\Routes.razor",
+              "RelativeToolTip": "Mantenimiento.Web\\Components\\Routes.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-26T17:36:41.255Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Dockerfile",
+              "DocumentMoniker": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Web\\Dockerfile",
+              "RelativeDocumentMoniker": "Mantenimiento.Web\\Dockerfile",
+              "ToolTip": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Web\\Dockerfile",
+              "RelativeToolTip": "Mantenimiento.Web\\Dockerfile",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-10-26T07:13:39.592Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Login.razor",
+              "DocumentMoniker": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Web\\Components\\Pages\\Login.razor",
+              "RelativeDocumentMoniker": "Mantenimiento.Web\\Components\\Pages\\Login.razor",
+              "ToolTip": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Web\\Components\\Pages\\Login.razor",
+              "RelativeToolTip": "Mantenimiento.Web\\Components\\Pages\\Login.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-26T17:31:31.375Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Mantenimientos.razor",
+              "DocumentMoniker": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Web\\Components\\Pages\\Mantenimientos.razor",
+              "RelativeDocumentMoniker": "Mantenimiento.Web\\Components\\Pages\\Mantenimientos.razor",
+              "ToolTip": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Web\\Components\\Pages\\Mantenimientos.razor",
+              "RelativeToolTip": "Mantenimiento.Web\\Components\\Pages\\Mantenimientos.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-26T17:38:54.633Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Fallas.razor",
+              "DocumentMoniker": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Web\\Components\\Pages\\Fallas.razor",
+              "RelativeDocumentMoniker": "Mantenimiento.Web\\Components\\Pages\\Fallas.razor",
+              "ToolTip": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Web\\Components\\Pages\\Fallas.razor",
+              "RelativeToolTip": "Mantenimiento.Web\\Components\\Pages\\Fallas.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-26T17:38:44.757Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Mantenimiento.Api.http",
+              "DocumentMoniker": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Api\\Mantenimiento.Api.http",
+              "RelativeDocumentMoniker": "Mantenimiento.Api\\Mantenimiento.Api.http",
+              "ToolTip": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Api\\Mantenimiento.Api.http",
+              "RelativeToolTip": "Mantenimiento.Api\\Mantenimiento.Api.http",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
+              "WhenOpened": "2026-10-26T07:13:01.067Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "_Imports.razor",
+              "DocumentMoniker": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Web\\Components\\_Imports.razor",
+              "RelativeDocumentMoniker": "Mantenimiento.Web\\Components\\_Imports.razor",
+              "ToolTip": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Web\\Components\\_Imports.razor",
+              "RelativeToolTip": "Mantenimiento.Web\\Components\\_Imports.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-26T17:57:18.831Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Home.razor",
+              "DocumentMoniker": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Web\\Components\\Pages\\Home.razor",
+              "RelativeDocumentMoniker": "Mantenimiento.Web\\Components\\Pages\\Home.razor",
+              "ToolTip": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Web\\Components\\Pages\\Home.razor",
+              "RelativeToolTip": "Mantenimiento.Web\\Components\\Pages\\Home.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-10-26T17:38:05.832Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Dockerfile",
+              "DocumentMoniker": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Api\\Dockerfile",
+              "RelativeDocumentMoniker": "Mantenimiento.Api\\Dockerfile",
+              "ToolTip": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Api\\Dockerfile",
+              "RelativeToolTip": "Mantenimiento.Api\\Dockerfile",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-10-26T07:12:23.923Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "FinalizarMantenimientoRequest.cs",
+              "DocumentMoniker": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Application\\DTOs\\FinalizarMantenimientoRequest.cs",
+              "RelativeDocumentMoniker": "Mantenimiento.Application\\DTOs\\FinalizarMantenimientoRequest.cs",
+              "ToolTip": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Application\\DTOs\\FinalizarMantenimientoRequest.cs",
+              "RelativeToolTip": "Mantenimiento.Application\\DTOs\\FinalizarMantenimientoRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-26T05:07:39.026Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "AsignarMantenimientoRequest.cs",
+              "DocumentMoniker": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Application\\DTOs\\AsignarMantenimientoRequest.cs",
+              "RelativeDocumentMoniker": "Mantenimiento.Application\\DTOs\\AsignarMantenimientoRequest.cs",
+              "ToolTip": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Application\\DTOs\\AsignarMantenimientoRequest.cs",
+              "RelativeToolTip": "Mantenimiento.Application\\DTOs\\AsignarMantenimientoRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-26T05:07:06.388Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

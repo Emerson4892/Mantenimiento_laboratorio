@@ -1,0 +1,28 @@
+@inject NavigationManager Navigation
+
+<div class="container py-5 text-center">
+    <h4>Acceso restringido</h4>
+    <p>Debe iniciar sesión para continuar.</p>
+    <a class="btn btn-primary" href="@EnlaceLogin">Iniciar sesión</a>
+</div>
+
+@code {
+    private string EnlaceLogin { get; set; } = "/login";
+
+    protected override void OnInitialized()
+    {
+        var relativo = Navigation.ToBaseRelativePath(Navigation.Uri);
+        var destino = string.IsNullOrEmpty(relativo) ? "/" : "/" + relativo;
+
+        if (!destino.StartsWith("/login", StringComparison.OrdinalIgnoreCase))
+        {
+            EnlaceLogin = "/login?returnUrl=" + Uri.EscapeDataString(destino);
+        }
+
+        Navigation.NavigateTo(EnlaceLogin, new NavigationOptions
+        {
+            ForceLoad = true,
+            ReplaceHistoryEntry = true
+        });
+    }
+}

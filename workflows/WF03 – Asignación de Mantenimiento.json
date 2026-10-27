@@ -1,0 +1,518 @@
+{
+  "name": "WF03 – Asignación de Mantenimiento",
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "const datos = $json.body ?? $json;\nconst errores = [];\n\nif (!datos.id_falla) {\n    errores.push(\"Falta el ID de la falla\");\n}\n\nif (!datos.tecnico) {\n    errores.push(\"Falta el nombre del técnico\");\n}\n\nreturn [{\n    json: {\n        ...datos,\n        valido: errores.length === 0,\n        errores\n    }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -928,
+        16
+      ],
+      "id": "870fcda2-551f-4f21-bf8b-3f20a2183b58",
+      "name": "Validar datos de asignación"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "0606c6fb-3621-4b73-9bae-03a70fd66b8e",
+              "leftValue": "={{ $json.valido }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -784,
+        16
+      ],
+      "id": "62dfe495-cafe-452c-8a63-3ccc29160afd",
+      "name": "¿Datos válidos?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{\n{\n  ok: false,\n  mensaje: \"Los datos de la asignación no son válidos\",\n  errores: $json.errores\n}\n}}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        -672,
+        144
+      ],
+      "id": "d31f2ccd-606f-4101-b210-940d608e0a66",
+      "name": "Datos inválidos"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT\n    EXISTS(\n        SELECT 1\n        FROM fallas\n        WHERE id_falla = $1\n    ) AS existe,\n    (\n        SELECT id_falla\n        FROM fallas\n        WHERE id_falla = $1\n        LIMIT 1\n    ) AS id_falla,\n    (\n        SELECT id_equipo\n        FROM fallas\n        WHERE id_falla = $1\n        LIMIT 1\n    ) AS id_equipo,\n    (\n        SELECT estado\n        FROM fallas\n        WHERE id_falla = $1\n        LIMIT 1\n    ) AS estado_falla;",
+        "options": {
+          "queryReplacement": "={{ [$json.id_falla] }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        -640,
+        -304
+      ],
+      "id": "98021342-4b31-439d-871a-0af7ea9b7337",
+      "name": "¿Datos válidos?1",
+      "credentials": {
+        "postgres": {
+          "id": "8thV3rNcFPBo7jhw",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6600450e-2bba-4e6a-93b9-bff82216fac2",
+              "leftValue": "={{ $json.existe }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -512,
+        -64
+      ],
+      "id": "5e4382c7-b1c5-4472-a753-dd983b534fd0",
+      "name": "¿Falla existe?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{\n{\n  ok: false,\n  mensaje: \"La falla indicada no existe\",\n  id_falla: $(\"¿Datos válidos?\").item.json.id_falla\n}\n}}",
+        "options": {
+          "responseCode": 404
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        -368,
+        144
+      ],
+      "id": "287b944c-c5bc-47a9-8937-35fac41066be",
+      "name": "Falla no encontrada"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "\nWITH nuevo AS (\n    INSERT INTO mantenimientos (\n        id_falla,\n        tecnico,\n        observacion,\n        estado\n    )\n    SELECT\n        f.id_falla,\n        $2::text,\n        NULLIF($3::text, ''),\n        'Asignado'\n    FROM fallas f\n    WHERE f.id_falla = $1::integer\n      AND f.estado = 'Pendiente'\n      AND NOT EXISTS (\n          SELECT 1\n          FROM mantenimientos m\n          WHERE m.id_falla = f.id_falla\n            AND m.estado IN ('Asignado', 'En proceso')\n      )\n    ON CONFLICT (id_falla)\n    WHERE estado IN ('Asignado', 'En proceso')\n    DO NOTHING\n    RETURNING id_mantenimiento\n)\nSELECT\n    EXISTS (SELECT 1 FROM nuevo) AS ok,\n    (SELECT id_mantenimiento FROM nuevo) AS id_mantenimiento,\n    CASE\n        WHEN EXISTS (SELECT 1 FROM nuevo)\n        THEN 'Mantenimiento asignado correctamente'\n        ELSE 'La falla no está pendiente o ya tiene un mantenimiento activo'\n    END AS mensaje;\n",
+        "options": {
+          "queryReplacement": "={{ [\n  $(\"Validar datos de asignación\").first().json.id_falla,\n  $(\"Validar datos de asignación\").first().json.tecnico,\n  $(\"Validar datos de asignación\").first().json.observacion ?? null\n] }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        -352,
+        -272
+      ],
+      "id": "7044f0d6-b029-4b5d-a391-e8166265bfc3",
+      "name": "Registrar Mantenimiento",
+      "credentials": {
+        "postgres": {
+          "id": "8thV3rNcFPBo7jhw",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "\nUPDATE fallas\nSET estado = 'En proceso'\nWHERE id_falla = $1\n  AND estado = 'Pendiente'\nRETURNING\n    id_falla,\n    id_equipo,\n    descripcion,\n    prioridad,\n    estado;\n",
+        "options": {
+          "queryReplacement": "={{ [$(\"¿Falla existe?\").item.json.id_falla] }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        304,
+        -256
+      ],
+      "id": "6126718c-42fe-4e33-b27f-db5cf1df677f",
+      "name": "Actualizar Estado Falla",
+      "credentials": {
+        "postgres": {
+          "id": "8thV3rNcFPBo7jhw",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "auditoria",
+          "mode": "list",
+          "cachedResultName": "auditoria"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "accion": "ASIGNACION_MANTENIMIENTO",
+            "entidad": "FALLA",
+            "resultado": "EXITOSO",
+            "detalle": "= {{   \"Falla \" +   $(\"Validar datos de asignación\").first().json.id_falla +   \" asignada al técnico \" +   $(\"Validar datos de asignación\").first().json.tecnico +   \". Mantenimiento ID: \" +   $(\"Registrar Mantenimiento\").first().json.id_mantenimiento }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "id_auditoria",
+              "displayName": "id_auditoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "accion",
+              "displayName": "accion",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "entidad",
+              "displayName": "entidad",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "detalle",
+              "displayName": "detalle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "resultado",
+              "displayName": "resultado",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fecha",
+              "displayName": "fecha",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        544,
+        -256
+      ],
+      "id": "ff3e6a07-3e71-40f9-a210-c3c72c0745b5",
+      "name": "Registrar Auditoría",
+      "credentials": {
+        "postgres": {
+          "id": "8thV3rNcFPBo7jhw",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "=\n{{ JSON.stringify({\n  ok: true,\n  mensaje: \"Mantenimiento asignado correctamente.\",\n  id_mantenimiento: $(\"Registrar Mantenimiento\").first().json.id_mantenimiento,\n  id_falla: $(\"Validar datos de asignación\").first().json.id_falla\n}) }}\n\n",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        752,
+        -256
+      ],
+      "id": "6c5b6585-5cb5-4d5e-9ab1-e58e68c075a0",
+      "name": "Asignación Exitosa"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "asignaciones",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1120,
+        16
+      ],
+      "id": "69839ec7-0d7f-455a-8040-2a673cf11ad8",
+      "name": "Asignación de Mantenimiento",
+      "webhookId": "aa63dede-7f2f-48cd-8ae8-89bc902981c5",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ymBCA43GimkFMJwX",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "986a5d9a-11f7-4c63-9847-2ff1636585c2",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        0,
+        -128
+      ],
+      "id": "c05173c2-5359-4bbf-85fd-5b666fdc2e9c",
+      "name": "¿Mantenimiento registrado?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "=\n{{ JSON.stringify({\n  ok: false,\n  mensaje: $json.mensaje || \"No se pudo asignar el mantenimiento.\"\n}) }}\n",
+        "options": {
+          "responseCode": 409
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        208,
+        -32
+      ],
+      "id": "294eb802-3db8-41ec-9acf-8417169609a0",
+      "name": "Asignación Rechazada"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Validar datos de asignación": {
+      "main": [
+        [
+          {
+            "node": "¿Datos válidos?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Datos válidos?": {
+      "main": [
+        [
+          {
+            "node": "¿Datos válidos?1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Datos inválidos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Datos válidos?1": {
+      "main": [
+        [
+          {
+            "node": "¿Falla existe?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Falla existe?": {
+      "main": [
+        [
+          {
+            "node": "Registrar Mantenimiento",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Falla no encontrada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registrar Mantenimiento": {
+      "main": [
+        [
+          {
+            "node": "¿Mantenimiento registrado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Actualizar Estado Falla": {
+      "main": [
+        [
+          {
+            "node": "Registrar Auditoría",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registrar Auditoría": {
+      "main": [
+        [
+          {
+            "node": "Asignación Exitosa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Asignación de Mantenimiento": {
+      "main": [
+        [
+          {
+            "node": "Validar datos de asignación",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Mantenimiento registrado?": {
+      "main": [
+        [
+          {
+            "node": "Actualizar Estado Falla",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Asignación Rechazada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "92da2494-de42-44ab-94ba-f9db5c5c155e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6267a444fdd1936b330464ae15307a1db98604d8e331ca1a0353579eb5448405"
+  },
+  "nodeGroups": [],
+  "id": "EN0CBzNeMAfWRQHE",
+  "tags": []
+}

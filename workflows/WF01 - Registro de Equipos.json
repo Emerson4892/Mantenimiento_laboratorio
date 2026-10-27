@@ -1,0 +1,543 @@
+{
+  "name": "WF01 - Registro de Equipos",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "equipos",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -688,
+        -32
+      ],
+      "id": "a126949b-90f1-4f75-954d-3f6e63f9166b",
+      "name": "Recepcion de Equipos",
+      "webhookId": "403caed9-bcce-460f-9f9e-f3a6b0afc86b",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ymBCA43GimkFMJwX",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const datos = $json.body ?? $json;\n\nconst errores = [];\n\nif (!datos.codigo || String(datos.codigo).trim() === \"\") {\n    errores.push(\"Falta el código\");\n}\n\nif (!datos.nombre || String(datos.nombre).trim() === \"\") {\n    errores.push(\"Falta el nombre\");\n}\n\nif (!datos.tipo || String(datos.tipo).trim() === \"\") {\n    errores.push(\"Falta el tipo\");\n}\n\nreturn [{\n    json: {\n        ...datos,\n        codigo: datos.codigo?.trim(),\n        nombre: datos.nombre?.trim(),\n        tipo: datos.tipo?.trim(),\n        valido: errores.length === 0,\n        errores\n    }\n}];;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -448,
+        -32
+      ],
+      "id": "16e023d9-a1cd-40c0-8d1f-d9c6f1a4087a",
+      "name": "Validar datos de Equipo"
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "equipos",
+          "mode": "list",
+          "cachedResultName": "equipos"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "codigo": "={{ $(\"Validar datos de Equipo\").item.json.codigo }}",
+            "tipo": "={{ $(\"Validar datos de Equipo\").item.json.tipo }}",
+            "marca": "={{ $(\"Validar datos de Equipo\").item.json.marca }}",
+            "modelo": "={{ $(\"Validar datos de Equipo\").item.json.modelo }}",
+            "numero_serie": "={{ $(\"Validar datos de Equipo\").item.json.numero_serie }}",
+            "ubicacion": "={{ $(\"Validar datos de Equipo\").item.json.ubicacion }}",
+            "estado": "={{ $(\"Validar datos de Equipo\").item.json.estado || \"Disponible\" }}",
+            "nombre": "={{ $(\"Validar datos de Equipo\").item.json.nombre }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "id_equipo",
+              "displayName": "id_equipo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "codigo",
+              "displayName": "codigo",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "nombre",
+              "displayName": "nombre",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "tipo",
+              "displayName": "tipo",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "marca",
+              "displayName": "marca",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "modelo",
+              "displayName": "modelo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "numero_serie",
+              "displayName": "numero_serie",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ubicacion",
+              "displayName": "ubicacion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "estado",
+              "displayName": "estado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "fecha_registro",
+              "displayName": "fecha_registro",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        288,
+        48
+      ],
+      "id": "24cb433a-c841-429c-96a8-ba1105306d0f",
+      "name": "Guardar Equipo",
+      "credentials": {
+        "postgres": {
+          "id": "8thV3rNcFPBo7jhw",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "auditoria",
+          "mode": "list",
+          "cachedResultName": "auditoria"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "accion": "REGISTRO_EQUIPO",
+            "entidad": "equipos",
+            "detalle": "={{ \"Equipo \" + $json.codigo + \" registrado con ID \" + $json.id_equipo }}",
+            "resultado": "EXITOSO"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "id_auditoria",
+              "displayName": "id_auditoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "accion",
+              "displayName": "accion",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "entidad",
+              "displayName": "entidad",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "detalle",
+              "displayName": "detalle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "resultado",
+              "displayName": "resultado",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fecha",
+              "displayName": "fecha",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        480,
+        48
+      ],
+      "id": "acfbfad3-b1fc-4a34-bf42-17c27a9aeb15",
+      "name": "Registro de Auditoria",
+      "credentials": {
+        "postgres": {
+          "id": "8thV3rNcFPBo7jhw",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{\n  {\n    ok: true,\n    mensaje: \"Equipo registrado correctamente\",\n    codigo: $(\"Guardar Equipo\").item.json.codigo,\n    id_equipo: $(\"Guardar Equipo\").item.json.id_equipo\n  }\n}}",
+        "options": {
+          "responseCode": 201
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        656,
+        48
+      ],
+      "id": "442674f9-ae81-46c0-9fd3-9b45726e1589",
+      "name": "Registro Exitoso"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6bc5f175-9b48-4621-a38b-2689d58e5254",
+              "leftValue": "={{ $json.valido }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -224,
+        -80
+      ],
+      "id": "6a91018b-16ea-4095-8c87-4fa3d55774f3",
+      "name": "¿Datos Validos?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{\n{\n  \"ok\": false,\n  \"mensaje\": \"Los datos del equipo no son válidos.\",\n  \"errores\": $json.errores\n}\n}}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        -64,
+        224
+      ],
+      "id": "f0b5e119-9fa7-4b48-a25e-e792d3cc93fe",
+      "name": "Datos Invalidos"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n    EXISTS (\n        SELECT 1\n        FROM equipos\n        WHERE codigo = $1\n           OR numero_serie = $2\n    ) AS existe;",
+        "options": {
+          "queryReplacement": "={{ [$json.codigo, $json.numero_serie] }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        -64,
+        -256
+      ],
+      "id": "5394caf1-7c3e-4340-b419-3e0719016860",
+      "name": "Buscar Equipo Duplicado",
+      "credentials": {
+        "postgres": {
+          "id": "8thV3rNcFPBo7jhw",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "51721ac3-a328-475c-ada4-9c56cf2859ef",
+              "leftValue": "={{ $json.existe }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        80,
+        0
+      ],
+      "id": "71177f06-a08b-4c2f-8de9-bb49414740dc",
+      "name": "¿Equipo ya existe?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{\n  {\n    ok: false,\n    mensaje: \"El equipo ya se encuentra registrado\",\n    codigo: $(\"Validar datos de Equipo\").item.json.codigo,\n    numero_serie: $(\"Validar datos de Equipo\").item.json.numero_serie\n  }\n}}",
+        "options": {
+          "responseCode": 409
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        288,
+        -192
+      ],
+      "id": "32114954-5fa0-4aa0-914f-2e9d346d8f67",
+      "name": "Equipo Duplicado"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Recepcion de Equipos": {
+      "main": [
+        [
+          {
+            "node": "Validar datos de Equipo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar datos de Equipo": {
+      "main": [
+        [
+          {
+            "node": "¿Datos Validos?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Guardar Equipo": {
+      "main": [
+        [
+          {
+            "node": "Registro de Auditoria",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registro de Auditoria": {
+      "main": [
+        [
+          {
+            "node": "Registro Exitoso",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Datos Validos?": {
+      "main": [
+        [
+          {
+            "node": "Buscar Equipo Duplicado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Datos Invalidos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Equipo Duplicado": {
+      "main": [
+        [
+          {
+            "node": "¿Equipo ya existe?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Equipo ya existe?": {
+      "main": [
+        [
+          {
+            "node": "Equipo Duplicado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Guardar Equipo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "Ps6UuHJsGbyoN03S",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "cef8bda0-002b-46fb-a6c1-dea2611e49ce",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6267a444fdd1936b330464ae15307a1db98604d8e331ca1a0353579eb5448405"
+  },
+  "nodeGroups": [],
+  "id": "3pXYfRAMzuiWq0D6",
+  "tags": []
+}

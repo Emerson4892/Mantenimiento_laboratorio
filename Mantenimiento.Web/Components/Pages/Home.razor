@@ -1,0 +1,150 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+@page "/"
+
+<PageTitle>Inicio | Mantenimiento</PageTitle>
+
+<div class="container-fluid py-3">
+
+    <!-- ENCABEZADO -->
+    <div class="mb-4">
+        <h2 class="fw-semibold mb-1">
+            Panel de control
+        </h2>
+
+        <p class="text-muted mb-0">
+            Gestión de mantenimiento de equipos de laboratorio
+        </p>
+    </div>
+
+    <!-- MÓDULOS DEL SISTEMA -->
+    <div class="row g-3 mb-4">
+
+        <!-- EQUIPOS -->
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card border h-100">
+                <div class="card-body p-4">
+
+                    <i class="bi bi-pc-display fs-3 text-secondary"></i>
+
+                    <h5 class="fw-semibold mt-3">
+                        Equipos
+                    </h5>
+
+                    <p class="text-muted small">
+                        Registro y administración de equipos.
+                    </p>
+
+                    <a href="/equipos"
+                       class="btn btn-outline-secondary btn-sm">
+                        Abrir módulo
+                        <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- FALLAS -->
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card border h-100">
+                <div class="card-body p-4">
+
+                    <i class="bi bi-exclamation-triangle fs-3 text-secondary"></i>
+
+                    <h5 class="fw-semibold mt-3">
+                        Fallas
+                    </h5>
+
+                    <p class="text-muted small">
+                        Registro y seguimiento de incidencias.
+                    </p>
+
+                    <a href="/fallas"
+                       class="btn btn-outline-secondary btn-sm">
+                        Abrir módulo
+                        <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- MANTENIMIENTOS -->
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card border h-100">
+                <div class="card-body p-4">
+
+                    <i class="bi bi-tools fs-3 text-secondary"></i>
+
+                    <h5 class="fw-semibold mt-3">
+                        Mantenimientos
+                    </h5>
+
+                    <p class="text-muted small">
+                        Asignaciones y control de reparaciones.
+                    </p>
+
+                    <a href="/mantenimientos"
+                       class="btn btn-outline-secondary btn-sm">
+                        Abrir módulo
+                        <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- REPORTES -->
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card border h-100">
+                <div class="card-body p-4">
+
+                    <i class="bi bi-bar-chart-line fs-3 text-secondary"></i>
+
+                    <h5 class="fw-semibold mt-3">
+                        Reportes
+                    </h5>
+
+                    <p class="text-muted small">
+                        Consultas e historial de mantenimiento.
+                    </p>
+
+                    <a href="/reportes"
+                       class="btn btn-outline-secondary btn-sm">
+                        Abrir módulo
+                        <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- INFORMACIÓN GENERAL -->
+    <div class="card border">
+        <div class="card-body p-4">
+
+            <h5 class="fw-semibold mb-3">
+                Información general
+            </h5>
+
+            <p class="text-muted mb-3">
+                Plataforma para la administración de equipos,
+                el seguimiento de fallas y la gestión de
+                mantenimientos preventivos y correctivos.
+            </p>
+
+            <div class="border-top pt-3">
+                <span class="text-muted small">
+                    Sistema de Gestión de Mantenimiento
+                    de Equipos de Laboratorio
+                </span>
+            </div>
+
+        </div>
+    </div>
+
+</div>

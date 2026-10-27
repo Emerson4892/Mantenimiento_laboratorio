@@ -1,0 +1,541 @@
+{
+  "name": "WF02 - Reporte de Fallas",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "fallas",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1072,
+        0
+      ],
+      "id": "20befd98-3aa8-4914-b7d4-420b659841e3",
+      "name": "Recepción de Falla",
+      "webhookId": "8ad925ac-18d0-4806-a378-665d91032d9e",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ymBCA43GimkFMJwX",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6dcfb39c-c7b5-472f-acdc-0d0eb244440e",
+              "leftValue": "={{ $json.valido }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -720,
+        0
+      ],
+      "id": "79bf013f-3bca-4932-9b2c-6487d84fea4d",
+      "name": "¿Datos válidos?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{\n{\n  ok: false,\n  mensaje: \"Los datos del reporte de falla no son válidos\",\n  errores: $json.errores\n}\n}}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        -560,
+        208
+      ],
+      "id": "e4481082-dc81-4c38-9d7c-049c21b8eb0d",
+      "name": "Datos inválidos"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "\nSELECT\n    EXISTS (\n        SELECT 1\n        FROM equipos\n        WHERE id_equipo = $1\n    ) AS existe,\n    (\n        SELECT id_equipo\n        FROM equipos\n        WHERE id_equipo = $1\n        LIMIT 1\n    ) AS id_equipo;\n",
+        "options": {
+          "queryReplacement": "= {{ $(\"Validar datos de falla\").first().json.id_equipo }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        -560,
+        -304
+      ],
+      "id": "41507aae-8abc-4fd8-b1a2-6383f17f08cb",
+      "name": "Buscar Equipo",
+      "credentials": {
+        "postgres": {
+          "id": "8thV3rNcFPBo7jhw",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "fallas",
+          "mode": "list",
+          "cachedResultName": "fallas"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id_equipo": "={{ $json.id_equipo }}",
+            "prioridad": "={{ $(\"¿Datos válidos?\").item.json.prioridad }}",
+            "estado": "Pendiente",
+            "descripcion": "={{ $(\"¿Datos válidos?\").item.json.descripcion }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "id_falla",
+              "displayName": "id_falla",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "id_equipo",
+              "displayName": "id_equipo",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "descripcion",
+              "displayName": "descripcion",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "prioridad",
+              "displayName": "prioridad",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "estado",
+              "displayName": "estado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fecha_reporte",
+              "displayName": "fecha_reporte",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        -256,
+        -256
+      ],
+      "id": "0182a163-7d97-4b20-a70c-3aad2538f2e7",
+      "name": "Registrar Falla",
+      "credentials": {
+        "postgres": {
+          "id": "8thV3rNcFPBo7jhw",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "750b08fb-ee46-4104-915d-c7033ae3770d",
+              "leftValue": "={{ $json.existe }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -448,
+        -32
+      ],
+      "id": "9c6e4474-7683-4ebf-99d1-a5850bd7722c",
+      "name": "¿Equipo existe?"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE equipos\nSET estado = 'En mantenimiento'\nWHERE id_equipo = $1\nRETURNING id_equipo, codigo, nombre, estado;",
+        "options": {
+          "queryReplacement": "={{ [$(\"¿Equipo existe?\").item.json.id_equipo] }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        -80,
+        -256
+      ],
+      "id": "f67e857c-f1dd-4459-9908-fad2a9cf4b55",
+      "name": "Actualizar Estado Equipo",
+      "credentials": {
+        "postgres": {
+          "id": "8thV3rNcFPBo7jhw",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "auditoria",
+          "mode": "list",
+          "cachedResultName": "auditoria"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "accion": "REPORTE_FALLA",
+            "entidad": "EQUIPO",
+            "detalle": "={{\n  \"Equipo \" +\n  $(\"¿Equipo existe?\").item.json.id_equipo +\n  \" - \" +\n  $(\"¿Datos válidos?\").item.json.codigo_equipo +\n  \" - \" +\n  $(\"¿Datos válidos?\").item.json.descripcion\n}}",
+            "resultado": "EXITOSO"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "id_auditoria",
+              "displayName": "id_auditoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "accion",
+              "displayName": "accion",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "entidad",
+              "displayName": "entidad",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "detalle",
+              "displayName": "detalle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "resultado",
+              "displayName": "resultado",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fecha",
+              "displayName": "fecha",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        64,
+        -256
+      ],
+      "id": "528aa612-4fcd-480a-a7eb-f9d4f6928877",
+      "name": "Registrar Auditoría",
+      "credentials": {
+        "postgres": {
+          "id": "8thV3rNcFPBo7jhw",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{\n{\n  ok: true,\n  mensaje: \"Falla registrada correctamente\",\n  id_falla: $(\"Registrar Falla\").item.json.id_falla,\n  id_equipo: $(\"¿Equipo existe?\").item.json.id_equipo,\n  codigo_equipo: $(\"¿Datos válidos?\").item.json.codigo_equipo,\n  estado_equipo: \"En mantenimiento\"\n}\n}}",
+        "options": {
+          "responseCode": 201
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        272,
+        -256
+      ],
+      "id": "3a08aef3-e219-465e-ba4d-8466a656c4b0",
+      "name": "Reporte Exitoso"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{\n{\n  ok: false,\n  mensaje: \"El equipo indicado no existe\",\n  codigo_equipo: $(\"¿Datos válidos?\").item.json.codigo_equipo\n}\n}}",
+        "options": {
+          "responseCode": 404
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        -240,
+        64
+      ],
+      "id": "ada306fc-9bc4-47f7-bb8a-732b1b9f3b2d",
+      "name": "Equipo no encontrado"
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst datos = $input.first().json.body ?? {};\n\nconst errores = [];\n\nconst idEquipo = Number(datos.id_equipo);\n\n// Validar identificador del equipo\nif (!Number.isInteger(idEquipo) || idEquipo <= 0) {\n  errores.push(\"El ID del equipo es obligatorio y debe ser válido\");\n}\n\n// Validar descripción\nif (\n  typeof datos.descripcion !== \"string\" ||\n  datos.descripcion.trim() === \"\"\n) {\n  errores.push(\"Falta la descripción de la falla\");\n}\n\n// Validar prioridad\nconst prioridadesValidas = [\"Baja\", \"Media\", \"Alta\"];\n\nconst prioridad = datos.prioridad || \"Media\";\n\nif (!prioridadesValidas.includes(prioridad)) {\n  errores.push(\"La prioridad no es válida\");\n}\n\nreturn [\n  {\n    json: {\n      id_equipo: idEquipo,\n      descripcion: datos.descripcion,\n      prioridad: prioridad,\n      valido: errores.length === 0,\n      errores: errores\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -896,
+        0
+      ],
+      "id": "bb1a9d85-2820-4ca1-bc3b-e54c93f6c620",
+      "name": "Validar datos de falla"
+    }
+  ],
+  "pinData": {
+    "Equipo no encontrado": [
+      {
+        "json": {
+          "name": "First item",
+          "code": 1
+        }
+      },
+      {
+        "json": {
+          "name": "Second item",
+          "code": 2
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Recepción de Falla": {
+      "main": [
+        [
+          {
+            "node": "Validar datos de falla",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Datos válidos?": {
+      "main": [
+        [
+          {
+            "node": "Buscar Equipo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Datos inválidos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registrar Falla": {
+      "main": [
+        [
+          {
+            "node": "Actualizar Estado Equipo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Equipo": {
+      "main": [
+        [
+          {
+            "node": "¿Equipo existe?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Equipo existe?": {
+      "main": [
+        [
+          {
+            "node": "Registrar Falla",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Equipo no encontrado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Actualizar Estado Equipo": {
+      "main": [
+        [
+          {
+            "node": "Registrar Auditoría",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registrar Auditoría": {
+      "main": [
+        [
+          {
+            "node": "Reporte Exitoso",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validar datos de falla": {
+      "main": [
+        [
+          {
+            "node": "¿Datos válidos?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "f2711d56-243f-4517-949e-8aa2a1935133",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6267a444fdd1936b330464ae15307a1db98604d8e331ca1a0353579eb5448405"
+  },
+  "nodeGroups": [],
+  "id": "YV1FSXPZrpTQV3G1",
+  "tags": []
+}

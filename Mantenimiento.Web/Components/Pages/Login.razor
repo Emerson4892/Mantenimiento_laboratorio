@@ -1,0 +1,114 @@
+﻿@page "/login"
+
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@using Mantenimiento.Web.Components.Layout
+
+@attribute [AllowAnonymous]
+@layout LoginLayout
+
+<PageTitle>Iniciar sesión | Mantenimiento Web</PageTitle>
+
+<div class="card border shadow-sm">
+
+    <div class="card-body p-4">
+
+        <!-- ENCABEZADO -->
+        <div class="text-center mb-4">
+
+            <i class="bi bi-shield-lock fs-1 text-secondary"></i>
+
+            <h3 class="fw-semibold mt-3">
+                Mantenimiento Web
+            </h3>
+
+            <p class="text-muted">
+                Gestión de equipos de laboratorio
+            </p>
+
+        </div>
+
+        <!-- MENSAJE DE ERROR -->
+        @if (Error == "1")
+        {
+            <div class="alert alert-danger" role="alert">
+
+                <i class="bi bi-exclamation-circle me-2"></i>
+
+                Usuario o contraseña incorrectos.
+
+            </div>
+        }
+
+        <!-- FORMULARIO DE LOGIN -->
+        <form method="post" action="/auth/login" data-enhance="false">
+
+            <AntiforgeryToken />
+
+            <input type="hidden" name="returnUrl" value="@ReturnUrl" />
+
+            <!-- USUARIO -->
+            <div class="mb-3">
+
+                <label for="usuario" class="form-label">
+                    Usuario
+                </label>
+
+                <input type="text"
+                       id="usuario"
+                       name="usuario"
+                       class="form-control"
+                       placeholder="Ingrese su usuario"
+                       autocomplete="username"
+                       maxlength="100"
+                       required />
+
+            </div>
+
+            <!-- CONTRASEÑA -->
+            <div class="mb-4">
+
+                <label for="contrasena" class="form-label">
+                    Contraseña
+                </label>
+
+                <input type="password"
+                       id="contrasena"
+                       name="contrasena"
+                       class="form-control"
+                       placeholder="Ingrese su contraseña"
+                       autocomplete="current-password"
+                       required />
+
+            </div>
+
+            <!-- BOTÓN -->
+            <button type="submit"
+                    class="btn btn-primary w-100">
+
+                <i class="bi bi-box-arrow-in-right me-2"></i>
+
+                Iniciar sesión
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+@code {
+
+    // Recibe el parámetro ?error=1
+    // cuando las credenciales son incorrectas.
+
+    [SupplyParameterFromQuery(Name = "error")]
+    public string? Error { get; set; }
+
+    [SupplyParameterFromQuery(Name = "returnUrl")]
+    public string? ReturnUrl { get; set; }
+
+}

@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "ac8Vt8w7DrQ=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\tzibc\\Desktop\\Proyecto\\MantenimientoLaboratorio\\Mantenimiento.Api\\Mantenimiento.Api.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\tzibc\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.14\\microsoft.aspnetcore.openapi.10.0.14.nupkg.sha512",
+    "C:\\Users\\tzibc\\.nuget\\packages\\microsoft.openapi\\2.12.2\\microsoft.openapi.2.12.2.nupkg.sha512",
+    "C:\\Users\\tzibc\\.nuget\\packages\\npgsql\\10.0.3\\npgsql.10.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,0 +1,39 @@
+# Visual Studio
+.vs/
+**/.vs/
+*.suo
+*.user
+
+# Compilaciones .NET
+**/bin/
+**/obj/
+**/TestResults/
+
+# Credenciales
+secrets/
+**/secrets/
+.env
+.env.*
+**/.env
+**/.env.*
+!.env.example
+
+# Configuraciones privadas
+**/appsettings.Development.json
+**/appsettings.Local.json
+**/secrets.json
+
+# Certificados
+*.pfx
+*.p12
+*.pem
+*.key
+
+# Temporales
+*.tmp
+*.log
+*.cache
+
+# Sistema operativo
+Thumbs.db
+.DS_Store
